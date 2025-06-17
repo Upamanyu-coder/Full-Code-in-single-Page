@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AI Flashcard Generator 📚⚡</title>
+<style>
+  /* ——— quick, classy styling ——— */
+  *{box-sizing:border-box;font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+  body{margin:0;background:#f5f7fa;color:#333;display:flex;flex-direction:column;align-items:center;padding:2rem}
+  h1{margin-top:0}
+  textarea{width:100%;max-width:700px;height:180px;padding:10px;border:1px solid #ccc;border-radius:8px}
+  button{padding:10px 18px;border:none;border-radius:6px;background:#007bff;color:#fff;font-size:1rem;cursor:pointer}
+  button:hover{background:#0056b3}
+  #cards{margin-top:2rem;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1.2rem;width:100%;max-width:900px}
+  .card{position:relative;height:140px;background:#fff;border-radius:10px;box-shadow:0 4px 8px rgba(0,0,0,.05);display:flex;align-items:center;justify-content:center;padding:1rem;text-align:center;cursor:pointer;perspective:800px}
+  .card__inner{position:absolute;inset:0;border-radius:inherit;transition:transform .6s;transform-style:preserve-3d}
+  .card.flipped .card__inner{transform:rotateY(180deg)}
+  .card__side{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:1rem;border-radius:inherit;backface-visibility:hidden}
+  .front{background:#fafafa;font-weight:600}
+  .back{background:#e9f7e7;transform:rotateY(180deg)}
+  .hint{font-size:.9rem;color:#555;margin-bottom:1.2rem}
+</style>
+</head>
+<body>
+
+<h1>AI Flashcard Generator 📚⚡</h1>
+<p class="hint">Paste your notes below, hit “Generate Flashcards”, then click each card to flip for the answer.</p>
+
+<textarea id="input" placeholder="Paste a chapter, lecture notes, or random Wikipedia rant here…"></textarea>
+<br><br>
+<button id="generateBtn">Generate Flashcards</button>
+
+<section id="cards"></section>
+
+<script>
+/* ——— Utility: super‑basic “keyword extractor” ———
+   1. Split text into sentences.
+   2. For each sentence, pick the longest noun‑ish phrase.
+   3. Build Q/A pairs: front = keyword (clozed), back = sentence with keyword highlighted.
+   This is intentionally simple (no fancy NLP) but works surprisingly well. */
+function extractFlashcards(text){
+  const stopwords = new Set(['the','a','an','and','or','in','of','to','with','is','are','was','were','on','for','by','as','at']);
+  const sentences = text
+      .replace(/\s+/g,' ')          // squash whitespace
+      .match(/[^.!?]+[.!?]?/g) || []; // crude sentence split
+
+  const cards = [];
+
+  sentences.forEach(sentence=>{
+    const words = sentence.trim().split(' ');
+    let best = '';
+    for(let i=0;i<words.length;i++){
+      const w = words[i].replace(/[^a-zA-Z]/g,'').toLowerCase();
+      if(w.length>3 && !stopwords.has(w) && w!==best){
+        best = w;
+      }
+    }
+    if(best){
+      const front = best[0].toUpperCase() + best.slice(1);
+      const back = sentence.replace(new RegExp('\\b('+best+')\\b','i'),'<strong>$1</strong>');
+      cards.push({front,back});
+    }
+  });
+
+  // de‑dup by front word
+  const seen=new Set();
+  return cards.filter(c=> !seen.has(c.front) && seen.add(c.front));
+}
+
+/* ——— DOM helpers ——— */
+function createCard({front,back}){
+  const card=document.createElement('div');
+  card.className='card';
+  card.innerHTML=`
+    <div class="card__inner">
+      <div class="card__side front">${front}</div>
+      <div class="card__side back">${back}</div>
+    </div>`;
+  card.addEventListener('click',()=>card.classList.toggle('flipped'));
+  return card;
+}
+
+/* ——— Main event ——— */
+document.getElementById('generateBtn').addEventListener('click',()=>{
+  const text=document.getElementById('input').value.trim();
+  const container=document.getElementById('cards');
+  container.innerHTML=''; // wipe previous
+  if(!text){
+    alert('Paste some notes first, my friend!');
+    return;
+  }
+  const cards=extractFlashcards(text);
+  if(!cards.length){
+    alert('Couldn’t find anything worth card‑ifying. Try longer notes.');
+    return;
+  }
+  cards.forEach(c=>container.appendChild(createCard(c)));
+});
+</script>
+
+</body>
+</html>
