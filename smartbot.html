@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mini SmartBot 🤖</title>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; padding: 2rem; }
+    .chat-container { max-width: 600px; margin: auto; background: #fff; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); overflow: hidden; }
+    .messages { height: 400px; overflow-y: auto; padding: 1rem; }
+    .msg { margin: 0.5rem 0; }
+    .user { text-align: right; color: #007bff; }
+    .bot { text-align: left; color: #333; }
+    .input-area { display: flex; border-top: 1px solid #ddd; }
+    input { flex: 1; padding: 1rem; border: none; outline: none; }
+    button { background: #007bff; color: white; border: none; padding: 1rem 1.5rem; cursor: pointer; }
+    button:hover { background: #0056b3; }
+  </style>
+</head>
+<body>
+
+<div class="chat-container">
+  <div class="messages" id="chat"></div>
+  <form class="input-area" onsubmit="return handleChat()">
+    <input type="text" id="userInput" placeholder="Type a message..." autocomplete="off" />
+    <button type="submit">Send</button>
+  </form>
+</div>
+
+<script>
+  const chat = document.getElementById('chat');
+
+  const smartBot = {
+    hello: "Hi there! 👋 How can I help you today?",
+    help: "You can ask me about math, coding, time, or random facts!",
+    time: () => `The current time is ${new Date().toLocaleTimeString()}.`,
+    date: () => `Today's date is ${new Date().toLocaleDateString()}.`,
+    joke: "Why do programmers prefer dark mode? Because light attracts bugs. 😆",
+    php: "PHP is a server-side scripting language, great for building web applications!",
+    default: "I'm not sure I understand that. Try asking something else!"
+  };
+
+  function addMessage(text, sender = 'bot') {
+    const div = document.createElement('div');
+    div.className = `msg ${sender}`;
+    div.innerHTML = text;
+    chat.appendChild(div);
+    chat.scrollTop = chat.scrollHeight;
+  }
+
+  function handleChat() {
+    const input = document.getElementById('userInput');
+    const userText = input.value.trim();
+    if (!userText) return false;
+
+    addMessage(userText, 'user');
+
+    // very basic "intent detection"
+    const lower = userText.toLowerCase();
+    let reply = smartBot.default;
+    for (let key in smartBot) {
+      if (lower.includes(key)) {
+        reply = typeof smartBot[key] === 'function' ? smartBot[key]() : smartBot[key];
+        break;
+      }
+    }
+
+    setTimeout(() => addMessage(reply, 'bot'), 500);
+    input.value = '';
+    return false;
+  }
+</script>
+
+</body>
+</html>
