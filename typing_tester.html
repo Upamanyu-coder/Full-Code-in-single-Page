@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>⌨️ Typing Speed Tester</title>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; padding: 2rem; background: #f8f9fa; text-align: center; }
+    h1 { margin-bottom: 1rem; }
+    #quote { font-size: 1.2rem; margin-bottom: 1rem; max-width: 600px; margin: auto; }
+    #inputArea { width: 100%; max-width: 600px; padding: 0.8rem; font-size: 1rem; margin-top: 0.5rem; }
+    .result { margin-top: 1rem; font-size: 1.1rem; }
+    button { padding: 0.5rem 1rem; margin-top: 1rem; font-size: 1rem; cursor: pointer; border: none; background: #007bff; color: white; border-radius: 5px; }
+    button:hover { background: #0056b3; }
+    .correct { color: green; }
+    .incorrect { color: red; }
+  </style>
+</head>
+<body>
+
+<h1>⌨️ Typing Speed Tester</h1>
+<div id="quote"></div>
+<input type="text" id="inputArea" placeholder="Start typing here..." oninput="checkInput()" disabled />
+<div class="result" id="results"></div>
+<button onclick="startTest()">Start Test</button>
+
+<script>
+  const quotes = [
+    "Typing is the gateway to fast coding.",
+    "Practice makes perfect and speedier.",
+    "Every letter counts in the race of keys.",
+    "Quick brown fox jumps over the lazy dog.",
+    "Code like lightning, debug like thunder."
+  ];
+
+  let startTime, currentQuote = "";
+
+  function startTest() {
+    const quote = quotes[Math.floor(Math.random() * quotes.length)];
+    document.getElementById("quote").textContent = quote;
+    document.getElementById("inputArea").value = "";
+    document.getElementById("inputArea").disabled = false;
+    document.getElementById("inputArea").focus();
+    document.getElementById("results").textContent = "";
+    currentQuote = quote;
+    startTime = new Date().getTime();
+  }
+
+  function checkInput() {
+    const input = document.getElementById("inputArea").value;
+    const quote = currentQuote;
+
+    if (input === quote) {
+      const endTime = new Date().getTime();
+      const timeTaken = (endTime - startTime) / 1000;
+      const wpm = Math.round((quote.split(" ").length / timeTaken) * 60);
+      const accuracy = calculateAccuracy(input, quote);
+      document.getElementById("results").innerHTML = `✅ <strong>Done!</strong><br>⏱️ Time: ${timeTaken.toFixed(2)}s<br>💨 WPM: ${wpm}<br>🎯 Accuracy: ${accuracy}%`;
+      document.getElementById("inputArea").disabled = true;
+    }
+  }
+
+  function calculateAccuracy(input, quote) {
+    let correct = 0;
+    for (let i = 0; i < input.length; i++) {
+      if (input[i] === quote[i]) correct++;
+    }
+    return Math.round((correct / quote.length) * 100);
+  }
+</script>
+
+</body>
+</html>
