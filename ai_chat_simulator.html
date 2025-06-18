@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>💬 AI Chat Simulator</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      padding: 2rem;
+    }
+    #chat-container {
+      background: white;
+      width: 400px;
+      border-radius: 8px;
+      padding: 1rem;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .message {
+      margin: 0.5rem 0;
+      padding: 0.5rem;
+      border-radius: 5px;
+      max-width: 80%;
+    }
+    .user {
+      background: #d1e7ff;
+      align-self: flex-end;
+      text-align: right;
+    }
+    .bot {
+      background: #e2e3e5;
+      align-self: flex-start;
+      text-align: left;
+    }
+    #messages {
+      display: flex;
+      flex-direction: column;
+      height: 300px;
+      overflow-y: auto;
+      margin-bottom: 1rem;
+    }
+    input {
+      width: 75%;
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      width: 20%;
+      padding: 0.5rem;
+      margin-left: 5%;
+      border: none;
+      background: #007bff;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+<div id="chat-container">
+  <div id="mess
