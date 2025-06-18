@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>🧠 Math Battle Game</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f0f4f8;
+      text-align: center;
+      padding: 2rem;
+    }
+    h1 {
+      color: #333;
+    }
+    #problem {
+      font-size: 2rem;
+      margin: 2rem 0;
+    }
+    input {
+      padding: 0.5rem;
+      font-size: 1.2rem;
+      width: 100px;
+      text-align: center;
+    }
+    button {
+      margin-left: 1rem;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      background: #28a745;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #218838;
+    }
+    #score, #timer {
+      font-size: 1.2rem;
+      margin: 1rem 0;
+    }
+    #game-over {
+      font-size: 1.5rem;
+      color: red;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🧠 Math Battle</h1>
+<div id="problem">Loading...</div>
+
+<input type="number" id="answerInput" placeholder="?" />
+<button onclick="submitAnswer()">Submit</button>
+
+<div id="score">Score: 0</div>
+<div id="timer">Time Left: 30s</div>
+<div id="game-over">⏰ Time's up! Refresh to play again.</div>
+
+<script>
+  let score = 0;
+  let timeLeft = 30;
+  let correctAnswer = 0;
+
+  const problemEl = document.getElementById("problem");
+  const answerInput = document.getElementById("answerInput");
+  const scoreEl = document.getElementById("score");
+  const timerEl = document.getElementById("timer");
+  const gameOverEl = document.getElementById("game-over");
+
+  function generateProblem() {
+    const num1 = Math.floor(Math.random() * 20 + 1);
+    const num2 = Math.floor(Math.random() * 20 + 1);
+    const operators = ["+", "-", "*"];
+    const op = operators[Math.floor(Math.random() * operators.length)];
+
+    correctAnswer = eval(`${num1} ${op} ${num2}`);
+    problemEl.textContent = `${num1} ${op} ${num2} = ?`;
+    answerInput.value = "";
+    answerInput.focus();
+  }
+
+  function submitAnswer() {
+    const userAnswer = parseInt(answerInput.value);
+    if (userAnswer === correctAnswer) {
+      score++;
+      scoreEl.textContent = `Score: ${score}`;
+    }
+    generateProblem();
+  }
+
+  function countdown() {
+    const timer = setInterval(() => {
+      timeLeft--;
+      timerEl.textContent = `Time Left: ${timeLeft}s`;
+      if (timeLeft <= 0) {
+        clearInterval(timer);
+        gameOverEl.style.display = "block";
+        answerInput.disabled = true;
+      }
+    }, 1000);
+  }
+
+  generateProblem();
+  countdown();
+
+  answerInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") submitAnswer();
+  });
+</script>
+
+</body>
+</html>
