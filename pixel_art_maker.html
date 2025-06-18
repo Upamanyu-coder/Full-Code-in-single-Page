@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>🎨 Pixel Art Maker</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      background: #f0f0f0;
+      padding: 2rem;
+    }
+    h1 {
+      margin-bottom: 1rem;
+    }
+    #controls {
+      margin-bottom: 1rem;
+    }
+    #canvas {
+      display: grid;
+      grid-template-columns: repeat(16, 20px);
+      grid-template-rows: repeat(16, 20px);
+      gap: 1px;
+      justify-content: center;
+      margin: auto;
+    }
+    .pixel {
+      width: 20px;
+      height: 20px;
+      background: white;
+      border: 1px solid #ccc;
+      cursor: pointer;
+    }
+    input[type="color"] {
+      height: 2rem;
+      width: 2rem;
+      vertical-align: middle;
+      border: none;
+      margin-right: 1rem;
+    }
+    button {
+      padding: 0.5rem 1rem;
+      border: none;
+      background: #007bff;
+      color: white;
+      font-size: 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🖌️ Pixel Art Maker</h1>
+
+<div id="controls">
+  <input type="color" id="colorPicker" value="#000000" />
+  <button onclick="clearCanvas()">🧼 Clear</button>
+</div>
+
+<div id="canvas"></div>
+
+<script>
+  const canvas = document.getElementById('canvas');
+  const colorPicker = document.getElementById('colorPicker');
+
+  function createCanvas(rows = 16, cols = 16) {
+    for (let i = 0; i < rows * cols; i++) {
+      const pixel = document.createElement('div');
+      pixel.classList.add('pixel');
+      pixel.addEventListener('click', () => {
+        pixel.style.backgroundColor = colorPicker.value;
+      });
+      canvas.appendChild(pixel);
+    }
+  }
+
+  function clearCanvas() {
+    const pixels = document.querySelectorAll('.pixel');
+    pixels.forEach(pixel => pixel.style.backgroundColor = 'white');
+  }
+
+  createCanvas();
+</script>
+
+</body>
+</html>
