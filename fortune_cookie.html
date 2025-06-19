@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>🥠 Fortune Cookie</title>
+  <style>
+    body {
+      background: #fffbe6;
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      padding: 2rem;
+    }
+    h1 {
+      color: #c0392b;
+    }
+    .cookie {
+      font-size: 5rem;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    .cookie:hover {
+      transform: scale(1.2);
+    }
+    #fortune {
+      margin-top: 2rem;
+      font-size: 1.5rem;
+      color: #2c3e50;
+      font-style: italic;
+    }
+    button {
+      margin-top: 1rem;
+      padding: 0.5rem 1.2rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 6px;
+      background: #e67e22;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #d35400;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🥠 Fortune Cookie</h1>
+<div class="cookie" onclick="revealFortune()">🥠</div>
+
+<div id="fortune"></div>
+<button onclick="revealFortune()">Open Another Cookie</button>
+
+<script>
+  const fortunes = [
+    "You will write bug-free code today. Believe it.",
+    "A semicolon will save your life.",
+    "Unexpected 'success' at line 42.",
+    "Stack Overflow knows your next question already.",
+    "You will soon debug with ease and snacks.",
+    "New syntax, new beginnings.",
+    "Great code comes with great comments.",
+    "May your loops be always terminating.",
+    "Refactor today, rejoice tomorrow.",
+    "Don't commit after midnight.",
+    "Somewhere, your future self thanks you.",
+    "Soon, you'll master the art of async.",
+    "A wise developer once said: 'console.log() is love.'",
+    "You are the chosen one — for the next deploy.",
+    "The bugs fear your power."
+  ];
+
+  function revealFortune() {
+    const rand = Math.floor(Math.random() * fortunes.length);
+    document.getElementById("fortune").textContent = fortunes[rand];
+  }
+</script>
+
+</body>
+</html>
