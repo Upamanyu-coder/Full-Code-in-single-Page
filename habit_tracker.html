@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>🔥 Habit Tracker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f8ff;
+      text-align: center;
+      padding: 2rem;
+    }
+    h1 {
+      color: #2c3e50;
+    }
+    #habitList {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      background: #e3f2fd;
+      padding: 1rem;
+      margin: 0.5rem auto;
+      max-width: 400px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .streak {
+      font-weight: bold;
+      color: green;
+    }
+    button {
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+      background: #3498db;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #2980b9;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🔥 Habit Tracker</h1>
+
+<input type="text" id="habitInput" placeholder="New habit e.g., 'Code 30 mins'" />
+<button onclick="addHabit()">Add Habit</button>
+
+<ul id="habitList"></ul>
+
+<script>
+  const habitList = document.getElementById("habitList");
+  const habitInput = document.getElementById("habitInput");
+
+  let habits = JSON.parse(localStorage.getItem("habits")) || [];
+
+  function saveHabits() {
+    localStorage.setItem("habits", JSON.stringify(habits));
+  }
+
+  function renderHabits() {
+    habitList.innerHTML = "";
+    habits.forEach((habit, index) => {
+      const li = document.createElement("li");
+      li.innerHTML = `
+        <span>${habit.name}</span>
+        <span class="streak">🔥 ${habit.streak}</span>
+        <button onclick="incrementStreak(${index})">Done Today</button>
+      `;
+      habitList.appendChild(li);
+    });
+  }
+
+  function addHabit() {
+    const name = habitInput.value.trim();
+    if (name) {
+      habits.push({ name, streak: 0 });
+      habitInput.value = "";
+      saveHabits();
+      renderHabits();
+    }
+  }
+
+  function incrementStreak(index) {
+    habits[index].streak++;
+    saveHabits();
+    renderHabits();
+  }
+
+  renderHabits();
+</script>
+
+</body>
+</html>
