@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>📅 To-Do Calendar</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 1rem;
+      background-color: #f0f0f0;
+    }
+    h1 {
+      color: #333;
+    }
+    .calendar {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 10px;
+      max-width: 800px;
+      margin: auto;
+    }
+    .day {
+      background: white;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 1rem;
+      min-height: 100px;
+      position: relative;
+    }
+    .day:hover {
+      background: #f5faff;
+    }
+    .date {
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+    .todo {
+      background: #d1ecf1;
+      margin: 0.3rem 0;
+      padding: 0.3rem;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+    input[type="text"] {
+      width: 60%;
+      padding: 0.5rem;
+      margin-top: 1rem;
+    }
+    select {
+      padding: 0.5rem;
+      margin-left: 0.5rem;
+    }
+    button {
+      padding: 0.5rem 1rem;
+      background-color: #007bff;
+      border: none;
+      color: white;
+      margin-left: 0.5rem;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🗓️ To-Do Calendar</h1>
+
+<div>
+  <input type="text" id="todoInput" placeholder="New task..." />
+  <select id="daySelect"></select>
+  <button onclick="addTodo()">Add</button>
+</div>
+
+<div class="calendar" id="calendar"></div>
+
+<script>
+  const calendarEl = document.getElementById('calendar');
+  const daySelect = document.getElementById('daySelect');
+  const todoInput = document.getElementById('todoInput');
+
+  const DAYS = 30; // Number of days to show
+  const todos = Array(DAYS).fill().map(() => []);
+
+  // Build the calendar
+  for (let i = 0; i < DAYS; i++) {
+    const dayDiv = document.createElement('div');
+    dayDiv.className = 'day';
+    dayDiv.id = `day-${i}`;
+    dayDiv.innerHTML = `<div class="date">Day ${i + 1}</div>`;
+    calendarEl.appendChild(dayDiv);
+
+    const option = document.createElement('option');
+    option.value = i;
+    option.textContent = `Day ${i + 1}`;
+    daySelect.appendChild(option);
+  }
+
+  function addTodo() {
+    const text = todoInput.value.trim();
+    const dayIndex = daySelect.value;
+
+    if (!text) return;
+    todos[dayIndex].push(text);
+    updateDay(dayIndex);
+    todoInput.value = '';
+  }
+
+  function updateDay(index) {
+    const dayDiv = document.getElementById(`day-${index}`);
+    const items = todos[index].map(todo => `<div class="todo">${todo}</div>`).join('');
+    dayDiv.innerHTML = `<div class="date">Day ${parseInt(index) + 1}</div>${items}`;
+  }
+</script>
+
+</body>
+</html>
