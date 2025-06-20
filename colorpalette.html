@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>🎨 Color Palette Picker</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f4f4;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 1rem;
+      color: #333;
+    }
+
+    .palette {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 1rem;
+    }
+
+    .color-box {
+      border-radius: 8px;
+      padding: 1.5rem;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.2s ease;
+    }
+
+    .color-box:hover {
+      transform: scale(1.05);
+    }
+
+    .lock {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(0,0,0,0.4);
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    button {
+      margin-top: 1.5rem;
+      padding: 0.6rem 1.2rem;
+      background-color: #333;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #555;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🎨 Color Palette Picker</h1>
+<div class="palette" id="palette"></div>
+<button onclick="generateColors()">🎲 Generate New Palette</button>
+
+<script>
+  const palette = document.getElementById('palette');
+  const BOX_COUNT = 5;
+  let locked = Array(BOX_COUNT).fill(false);
+  let colors = [];
+
+  function randomColor() {
+    return '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
+  }
+
+  function generateColors() {
+    colors = colors.map((c, i) => locked[i] ? c : randomColor());
+    renderPalette();
+  }
+
+  function toggleLock(index) {
+    locked[index] = !locked[index];
+    renderPalette();
+  }
+
+  function copyToClipboard(hex) {
+    navigator.clipboard.writeText(hex);
+    alert(`Copied: ${hex}`);
+  }
+
+  function renderPalette() {
+    palette.innerHTML = '';
+    colors.forEach((color, index) => {
+      const box = document.createElement('div');
+      box.className = 'color-box';
+      box.style.backgroundColor = color;
+      box.innerHTML = `
+        ${color}
+        <div class="lock" onclick="toggleLock(${index})">
+          ${locked[index] ? '🔒' : '🔓'}
+        </div>
+      `;
+      box.onclick = () => copyToClipboard(color);
+      palette.appendChild(box);
+    });
+  }
+
+  // Initial generation
+  colors = Array(BOX_COUNT).fill().map(() => randomColor());
+  generateColors();
+</script>
+
+</body>
+</html>
