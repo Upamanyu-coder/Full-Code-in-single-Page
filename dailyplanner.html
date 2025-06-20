@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>📅 Daily Planner</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f0f0;
+      padding: 2rem;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 2rem;
+    }
+
+    .planner {
+      max-width: 600px;
+      margin: auto;
+    }
+
+    .row {
+      display: flex;
+      margin-bottom: 0.5rem;
+    }
+
+    .hour {
+      width: 80px;
+      padding: 0.5rem;
+      background: #ddd;
+      text-align: center;
+      border: 1px solid #bbb;
+    }
+
+    .task {
+      flex: 1;
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      outline: none;
+    }
+
+    .save-btn {
+      width: 50px;
+      background: #333;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    .past { background: #d3d3d3; }
+    .present { background: #ff6961; }
+    .future { background: #77dd77; }
+  </style>
+</head>
+<body>
+
+<h1>🗓️ Daily Planner</h1>
+<div class="planner" id="planner"></div>
+
+<script>
+  const planner = document.getElementById('planner');
+  const startHour = 9;
+  const endHour = 17;
+  const currentHour = new Date().getHours();
+
+  function formatHour(hour) {
+    const suffix = hour >= 12 ? 'PM' : 'AM';
+    const display = hour > 12 ? hour - 12 : hour;
+    return `${display} ${suffix}`;
+  }
+
+  function loadTasks() {
+    for (let hour = startHour; hour <= endHour; hour++) {
+      const row = document.createElement('div');
+      row.className = 'row';
+
+      const hourBox = document.createElement('div');
+      hourBox.className = 'hour';
+      hourBox.textContent = formatHour(hour);
+
+      const taskInput = document.createElement('input');
+      taskInput.className = 'task';
+      taskInput.type = 'text';
+      taskInput.id = `task-${hour}`;
+      taskInput.value = localStorage.getItem(`task-${hour}`) || '';
+
+      if (hour < currentHour) {
+        taskInput.classList.add('past');
+      } else if (hour === currentHour) {
+        taskInput.classList.add('present');
+      } else {
+        taskInput.classList.add('future');
+      }
+
+      const saveBtn = document.createElement('button');
+      saveBtn.className = 'save-btn';
+      saveBtn.textContent = '💾';
+      saveBtn.onclick = () => {
+        localStorage.setItem(`task-${hour}`, taskInput.value);
+        alert('Saved!');
+      };
+
+      row.appendChild(hourBox);
+      row.appendChild(taskInput);
+      row.appendChild(saveBtn);
+      planner.appendChild(row);
+    }
+  }
+
+  loadTasks();
+</script>
+
+</body>
+</html>
