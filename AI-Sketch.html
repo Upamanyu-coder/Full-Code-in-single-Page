@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>🖌️ AI-Sketch Layout Generator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body{font-family:sans-serif;background:#111;color:#eee;padding:2rem;}
+    h1{font-size:2rem;margin-bottom:1rem;}
+    textarea{
+      width:100%; height:180px; font-family:monospace;
+      padding:1rem; border-radius:12px; border:2px solid #333;
+      background:#222; color:#f6f6f6; resize:vertical;
+    }
+    button{
+      padding:0.6rem 1.2rem; margin-top:0.8rem; font-size:1rem;
+      background:#6cf; color:#000; border:none; border-radius:12px;
+      cursor:pointer; font-weight:bold;
+    }
+    iframe{
+      margin-top:2rem; width:100%; height:600px; border:2px solid #333;
+      border-radius:12px; background:white;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🖌️ AI-Sketch: Draw Your Layout with Text</h1>
+
+<textarea id="sketchInput" placeholder="Describe your layout here..."></textarea>
+<br>
+<button id="generateBtn">🎨 Generate Layout</button>
+
+<iframe id="preview"></iframe>
+
+<script>
+class AISketch {
+  static cacheKey(desc){ return 'aisketch:' + btoa(desc); }
+
+  static async generate(desc){
+    const cached = localStorage.getItem(this.cacheKey(desc));
+    if(cached) return cached;
+
+    const prompt = `
+You are an expert HTML/CSS developer.
+
+Convert the following wireframe-style ASCII description or bullet layout into a clean, mobile-friendly webpage.
+
+Description:
+"""${desc}"""
+
+- Use semantic HTML5.
+- Use embedded CSS (inside <style>).
+- Use modern layout techniques (like flexbox/grid).
+- Return ONLY valid HTML starting with <!DOCTYPE.
+`;
+
+    const res = await fetch("https://api.openai.com/v1/chat/completions",{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json",
+        "Authorization":"Bearer YOUR_OPENAI_KEY"
+      },
+      body:JSON.stringify({
+        model:"gpt-4o-mini",
+        messages:[{role:"user",content:prompt}],
+      })
+    });
+
+    const json = await res.json();
+    const html = json.choices?.[0]?.message?.content ?? "<p>AI layout failed</p>";
+    localStorage.setItem(this.cacheKey(desc), html);
+    return html;
+  }
+}
+
+document.getElementById('generateBtn').addEventListener('click', async () => {
+  const sketch = document.getElementById('sketchInput').value.trim();
+  if (!sketch) return alert("Please describe your layout first!");
+
+  const iframe = document.getElementById('preview');
+  iframe.srcdoc = "<p style='text-align:center;padding:2rem;'>⏳ Generating...</p>";
+  
+  const html = await AISketch.generate(sketch);
+  iframe.srcdoc = html;
+});
+</script>
+
+</body>
+</html>
+
