@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Weather Dashboard</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #74ebd5, #acb6e5);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .container {
+      background: white;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+    .container h1 {
+      font-size: 1.8rem;
+      color: #333;
+      margin-bottom: 1rem;
+    }
+    input {
+      width: 80%;
+      padding: 0.6rem;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+    button {
+      margin-top: 1rem;
+      padding: 0.6rem 1rem;
+      font-size: 1rem;
+      background: #3f51b5;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #2c3e90;
+    }
+    .weather-card {
+      margin-top: 1.5rem;
+      background: #f0f0f0;
+      padding: 1rem;
+      border-radius: 12px;
+      display: none;
+    }
+    .weather-card h2 {
+      margin: 0.5rem 0;
+      color: #333;
+    }
+    .weather-card .temp {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: #3f51b5;
+    }
+    .weather-card .description {
+      text-transform: capitalize;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>🌤️ Weather Dashboard</h1>
+    <input type="text" id="cityInput" placeholder="Enter city name" />
+    <br />
+    <button onclick="getWeather()">Get Weather</button>
+    
+    <div class="weather-card" id="weatherCard">
+      <h2 id="cityName">City Name</h2>
+      <div class="temp" id="temp">-- °C</div>
+      <div class="description" id="desc">Weather Description</div>
+    </div>
+  </div>
+
+  <script>
+    // Mock weather data (can be replaced with real API)
+    const mockWeather = {
+      "Kathmandu": { temp: 25, desc: "sunny" },
+      "London": { temp: 17, desc: "cloudy" },
+      "Sydney": { temp: 28, desc: "clear sky" },
+      "New York": { temp: 22, desc: "rainy" },
+      "Tokyo": { temp: 30, desc: "humid" }
+    };
+
+    function getWeather() {
+      const cityInput = document.getElementById('cityInput').value.trim();
+      const cityName = document.getElementById('cityName');
+      const temp = document.getElementById('temp');
+      const desc = document.getElementById('desc');
+      const weatherCard = document.getElementById('weatherCard');
+
+      if (cityInput === "") {
+        alert("Please enter a city name.");
+        return;
+      }
+
+      const weather = mockWeather[cityInput];
+
+      if (weather) {
+        cityName.textContent = cityInput;
+        temp.textContent = weather.temp + " °C";
+        desc.textContent = weather.desc;
+        weatherCard.style.display = "block";
+      } else {
+        cityName.textContent = cityInput;
+        temp.textContent = "N/A";
+        desc.textContent = "No data available. Try Kathmandu or London.";
+        weatherCard.style.display = "block";
+      }
+    }
+
+    // Bonus: Press enter to trigger search
+    document.getElementById("cityInput").addEventListener("keyup", function(e) {
+      if (e.key === "Enter") getWeather();
+    });
+  </script>
+</body>
+</html>
