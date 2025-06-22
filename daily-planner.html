@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Daily Planner</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background: linear-gradient(to right, #00b4db, #0083b0);
+      color: #fff;
+      padding: 2rem;
+      margin: 0;
+      min-height: 100vh;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    .quote {
+      text-align: center;
+      font-style: italic;
+      margin-bottom: 2rem;
+      font-size: 1.2rem;
+    }
+    .task-input {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .task-input input {
+      padding: 10px;
+      border-radius: 6px;
+      border: none;
+      width: 300px;
+    }
+    .task-input button {
+      padding: 10px 20px;
+      border: none;
+      background-color: #fff;
+      color: #007788;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+      max-width: 600px;
+      margin: auto;
+    }
+    li {
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    li.completed {
+      text-decoration: line-through;
+      opacity: 0.6;
+    }
+    .actions button {
+      margin-left: 10px;
+      background-color: transparent;
+      border: none;
+      color: white;
+      cursor: pointer;
+    }
+    .actions button:hover {
+      color: #ffeb3b;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>📅 Daily Planner</h1>
+  <div class="quote" id="quote">"Every day is a chance to get better."</div>
+
+  <div class="task-input">
+    <input type="text" id="taskInput" placeholder="What's your task today?" />
+    <button onclick="addTask()">Add</button>
+  </div>
+
+  <ul id="taskList"></ul>
+
+  <script>
+    const taskInput = document.getElementById("taskInput");
+    const taskList = document.getElementById("taskList");
+    const quote = document.getElementById("quote");
+
+    const quotes = [
+      "Start strong, finish stronger!",
+      "Productivity is never an accident.",
+      "Plan your work and work your plan.",
+      "The best way to get things done is to begin.",
+      "Don’t count the days, make the days count.",
+      "A goal without a plan is just a wish.",
+      "Your only limit is your mind.",
+      "Discipline turns dreams into reality."
+    ];
+
+    function loadQuote() {
+      quote.textContent = quotes[Math.floor(Math.random() * quotes.length)];
+    }
+
+    function saveTasks() {
+      const tasks = [];
+      document.querySelectorAll("#taskList li").forEach(li => {
+        tasks.push({
+          text: li.querySelector("span").textContent,
+          completed: li.classList.contains("completed")
+        });
+      });
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+    }
+
+    function loadTasks() {
+      const saved = JSON.parse(localStorage.getItem("tasks") || "[]");
+      saved.forEach(task => addTask(task.text, task.completed));
+    }
+
+    function addTask(text = taskInput.value, completed = false) {
+      if (!text.trim()) return;
+
+      const li = document.createElement("li");
+      const span = document.createElement("span");
+      span.textContent = text;
+
+      const actions = document.createElement("div");
+      actions.classList.add("actions");
+
+      const doneBtn = document.createElement("button");
+      doneBtn.textContent = "✔";
+      doneBtn.onclick = () => {
+        li.classList.toggle("completed");
+        saveTasks();
+      };
+
+      const delBtn = document.createElement("button");
+      delBtn.textContent = "🗑";
+      delBtn.onclick = () => {
+        li.remove();
+        saveTasks();
+      };
+
+      actions.append(doneBtn, delBtn);
+      li.append(span, actions);
+
+      if (completed) li.classList.add("completed");
+
+      taskList.appendChild(li);
+      taskInput.value = "";
+      saveTasks();
+    }
+
+    loadTasks();
+    loadQuote();
+  </script>
+
+</body>
+</html>
