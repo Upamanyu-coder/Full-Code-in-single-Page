@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Age Mystery Quiz</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background: linear-gradient(to bottom, #ffe29f, #ffa99f);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      max-width: 400px;
+      width: 100%;
+    }
+
+    h1 {
+      color: #e91e63;
+      margin-bottom: 20px;
+    }
+
+    input[type="number"] {
+      padding: 12px;
+      width: 80%;
+      font-size: 1.1em;
+      margin-bottom: 20px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+    }
+
+    button {
+      padding: 12px 24px;
+      font-size: 1.1em;
+      background-color: #ff4081;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #e91e63;
+    }
+
+    #message {
+      margin-top: 20px;
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>🔮 Age Mystery Check</h1>
+    <p>Can your age pass the secret test?</p>
+    <input type="number" id="ageInput" placeholder="Enter your age..." />
+    <br />
+    <button onclick="checkMystery()">Reveal the Truth</button>
+    <div id="message">🕵️ Waiting for your age...</div>
+  </div>
+
+  <script>
+    function checkMystery() {
+      const age = Number(document.getElementById("ageInput").value);
+      const message = document.getElementById("message");
+
+      message.textContent = "🔄 Analyzing your age with quantum logic...";
+
+      setTimeout(() => {
+        if (!age || age < 0 || isNaN(age)) {
+          message.textContent = "⚠️ Please enter a valid non-negative age.";
+        } else if (age >= 10 && age <= 20) {
+          message.textContent = `🎉 Amazing! Your age (${age}) is in the special 10–20 zone!`;
+        } else {
+          message.textContent = `🧐 Hmmm... your age (${age}) is out of range. Still awesome though!`;
+        }
+      }, 1500); // Add suspense with 1.5 sec delay
+    }
+  </script>
+
+</body>
+</html>
