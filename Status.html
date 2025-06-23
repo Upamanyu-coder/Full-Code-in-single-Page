@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Status Toggle Simulator</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #222;
+    color: #eee;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    gap: 20px;
+  }
+  #status {
+    font-size: 2.5rem;
+    font-weight: bold;
+    padding: 20px 40px;
+    border-radius: 12px;
+    background: #0c0;
+    color: #fff;
+    transition: background 0.5s ease;
+  }
+  #status.offline {
+    background: #c00;
+  }
+  button {
+    padding: 15px 30px;
+    font-size: 1.25rem;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    background: #007bff;
+    color: white;
+    transition: background 0.3s ease;
+  }
+  button:hover {
+    background: #0056b3;
+  }
+</style>
+</head>
+<body>
+
+<div id="status">Online</div>
+<button id="callBtn">Someone Calls You!</button>
+
+<script>
+  const statusDiv = document.getElementById('status');
+  const callBtn = document.getElementById('callBtn');
+
+  // Set initial status
+  let isOnline = true;
+
+  function updateStatus() {
+    if (isOnline) {
+      statusDiv.textContent = "Online";
+      statusDiv.classList.remove('offline');
+    } else {
+      statusDiv.textContent = "Offline";
+      statusDiv.classList.add('offline');
+    }
+  }
+
+  callBtn.addEventListener('click', () => {
+    // When someone calls, go offline
+    if (isOnline) {
+      isOnline = false;
+      updateStatus();
+
+      // After 5 seconds, go back online automatically
+      setTimeout(() => {
+        isOnline = true;
+        updateStatus();
+      }, 5000);
+    }
+  });
+
+  updateStatus();
+</script>
+
+</body>
+</html>
