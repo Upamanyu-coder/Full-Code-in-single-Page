@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Age Range Checker</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f2f2f2;
+      padding: 40px;
+      text-align: center;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    input[type="number"] {
+      padding: 10px;
+      font-size: 16px;
+      border: 2px solid #ccc;
+      border-radius: 6px;
+      width: 200px;
+      margin-top: 10px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .success {
+      color: green;
+    }
+
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Age Range Checker (10 - 20)</h1>
+  <p>Enter your age below and let's see where you stand!</p>
+
+  <input type="number" id="ageInput" placeholder="Enter your age" min="0">
+  <br>
+  <button onclick="checkAge()">Check Age</button>
+
+  <div id="result"></div>
+
+  <script>
+    function checkAge() {
+      let age = document.getElementById("ageInput").value;
+      let resultDiv = document.getElementById("result");
+
+      // Convert input to number
+      age = Number(age);
+
+      // Check if age is between 10 and 20 using logical operator
+      if (age >= 10 && age <= 20) {
+        resultDiv.textContent = `✅ Yes! ${age} is between 10 and 20. You're in the golden range!`;
+        resultDiv.className = "success";
+      } else if (age < 10 && age >= 0) {
+        resultDiv.textContent = `😅 ${age} is too young for the range. Hang in there!`;
+        resultDiv.className = "error";
+      } else if (age > 20) {
+        resultDiv.textContent = `😎 ${age}? You're beyond the range. Rock on!`;
+        resultDiv.className = "error";
+      } else {
+        resultDiv.textContent = "⚠️ Please enter a valid age.";
+        resultDiv.className = "error";
+      }
+    }
+  </script>
+
+</body>
+</html>
